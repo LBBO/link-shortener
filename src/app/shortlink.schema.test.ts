@@ -1,19 +1,19 @@
-import { Shortlink, shortlinkSchema } from '@/app/shortlink.schema'
+import { ShortlinkCreate, shortlinkCreateSchema } from '@/app/shortlink.schema'
 
-const validShortlink: Shortlink = {
+const validShortlink: ShortlinkCreate = {
   link: 'https://google.com',
   slug: 'google',
 }
 
 it('should accept a valid shortlink', () => {
-  const result = shortlinkSchema.safeParse(validShortlink)
+  const result = shortlinkCreateSchema.safeParse(validShortlink)
 
   expect(result.success).toBe(true)
 })
 
 describe('link validation', () => {
   it('should not allow a non-string', () => {
-    const result = shortlinkSchema.safeParse({
+    const result = shortlinkCreateSchema.safeParse({
       ...validShortlink,
       link: 1,
     })
@@ -23,11 +23,11 @@ describe('link validation', () => {
 
   it('should not allow undefined or null', () => {
     const results = [
-      shortlinkSchema.safeParse({
+      shortlinkCreateSchema.safeParse({
         ...validShortlink,
         link: undefined,
       }),
-      shortlinkSchema.safeParse({
+      shortlinkCreateSchema.safeParse({
         ...validShortlink,
         link: null,
       }),
@@ -39,7 +39,7 @@ describe('link validation', () => {
   })
 
   it('should not allow an empty string', () => {
-    const result = shortlinkSchema.safeParse({
+    const result = shortlinkCreateSchema.safeParse({
       ...validShortlink,
       link: '',
     })
@@ -48,7 +48,7 @@ describe('link validation', () => {
   })
 
   it('should allow a HTTPS url', () => {
-    const result = shortlinkSchema.safeParse({
+    const result = shortlinkCreateSchema.safeParse({
       ...validShortlink,
       link: 'https://sub.example.com/foo/bar?biz=baz#lol',
     })
@@ -59,7 +59,7 @@ describe('link validation', () => {
 
 describe('slug validation', () => {
   it('should not allow a non-string', () => {
-    const result = shortlinkSchema.safeParse({
+    const result = shortlinkCreateSchema.safeParse({
       ...validShortlink,
       slug: 1,
     })
@@ -69,11 +69,11 @@ describe('slug validation', () => {
 
   it('should not allow undefined or null', () => {
     const results = [
-      shortlinkSchema.safeParse({
+      shortlinkCreateSchema.safeParse({
         ...validShortlink,
         slug: undefined,
       }),
-      shortlinkSchema.safeParse({
+      shortlinkCreateSchema.safeParse({
         ...validShortlink,
         slug: null,
       }),
@@ -85,7 +85,7 @@ describe('slug validation', () => {
   })
 
   it('should not allow an empty string', () => {
-    const result = shortlinkSchema.safeParse({
+    const result = shortlinkCreateSchema.safeParse({
       ...validShortlink,
       slug: '',
     })
@@ -96,7 +96,7 @@ describe('slug validation', () => {
   it.each([' ', '.', '好', 'ä', '/', '#'])(
     'should not allow %p',
     (forbidden) => {
-      const result = shortlinkSchema.safeParse({
+      const result = shortlinkCreateSchema.safeParse({
         ...validShortlink,
         slug: `safe${forbidden}safe`,
       })
@@ -106,19 +106,19 @@ describe('slug validation', () => {
   )
 
   it('should not allow - or _ at the beginning or the end', () => {
-    const underscoreAtStart = shortlinkSchema.safeParse({
+    const underscoreAtStart = shortlinkCreateSchema.safeParse({
       ...validShortlink,
       slug: '_safe',
     })
-    const underscoreAtEnd = shortlinkSchema.safeParse({
+    const underscoreAtEnd = shortlinkCreateSchema.safeParse({
       ...validShortlink,
       slug: 'safe_',
     })
-    const dashAtStart = shortlinkSchema.safeParse({
+    const dashAtStart = shortlinkCreateSchema.safeParse({
       ...validShortlink,
       slug: '-safe',
     })
-    const dashAtEnd = shortlinkSchema.safeParse({
+    const dashAtEnd = shortlinkCreateSchema.safeParse({
       ...validShortlink,
       slug: 'safe-',
     })
@@ -130,7 +130,7 @@ describe('slug validation', () => {
   })
 
   it('should allow a valid slug with all allowed special characters', () => {
-    const result = shortlinkSchema.safeParse({
+    const result = shortlinkCreateSchema.safeParse({
       ...validShortlink,
       slug: 'az09-_AZ',
     })
