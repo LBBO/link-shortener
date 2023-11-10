@@ -1,6 +1,6 @@
 import * as crypto from 'crypto'
-import zod from 'zod'
 import { BinaryLike } from 'crypto'
+import zod from 'zod'
 
 const cipherName = 'aes-256-gcm'
 
@@ -19,21 +19,13 @@ export const getHashAndKeyFromSlug = async (slug: string) => {
   const firstHash = await hash(slug)
   const key = firstHash.subarray(0, 32)
   const finalHash = await hash(firstHash)
-  return { key, hash: finalHash }
+  return { key, hash: finalHash.toString('base64') }
 }
 
 const createHmac = async (key: Buffer, ciphertext: Buffer) => {
   const hmacAlgo = crypto.createHmac('sha512', key)
   return hmacAlgo.update(ciphertext).digest()
 }
-
-export const encryptedUrlDataSchema = zod.object({
-  iv: zod.string(),
-  ciphertext: zod.string(),
-  hmac: zod.string(),
-})
-
-export type EncryptedUrlData = zod.infer<typeof encryptedUrlDataSchema>
 
 export const encryptUrl = async (key: Buffer, url: string) => {
   const iv = crypto.randomBytes(32)
