@@ -8,8 +8,8 @@ they lead to.
 
 - Choose your own slug (`https://my-link-shortener.com/#<slug>`)
 - Not even the database admin can see what the link is or where it leads
-- Add a `?` at the end of any short link (e.g. turn `htps://.../#foo` into `https://.../#foo?`) to see the target before
-  being redirected
+- Add a `?` anywhere after the `#` of a short link (e.g. turn `htps://.../#foo` into `https://.../#foo?`
+  or `https://.../#?foo`) to see the target before being redirected
 - Anyone can create their own deployment
 
 ## FAQ

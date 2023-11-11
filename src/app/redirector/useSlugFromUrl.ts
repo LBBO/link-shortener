@@ -18,9 +18,8 @@ export const useSlugFromUrl = () => {
     return undefined
   }
 
-  if (hash.endsWith('?')) {
-    return { slug: hash.slice(0, hash.length - 1), immediateRedirect: true }
+  return {
+    slug: hash.replaceAll('?', ''),
+    shouldRedirectImmediately: !hash.includes('?'),
   }
-
-  return { slug: hash, shouldRedirectImmediately: true }
 }
