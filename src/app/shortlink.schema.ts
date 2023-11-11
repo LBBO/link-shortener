@@ -4,6 +4,7 @@ export const validUrlSchema = zod
   .string()
   .url('This is not a valid URL!')
   .regex(/^https?:\/\//, 'Please provide an HTTP or HTTPS link')
+  .max(1_000, 'URLs with more than 1000 characters cannot be accepted')
 
 export const validSlugSchema = zod
   .string()

@@ -54,7 +54,6 @@ export const CreateShortLinkForm = () => {
     },
     onSuccess: () => {
       setShowCreatedDialog(true)
-      reset()
     },
     onError: () => {
       setShowAlreadyTakenDialog(true)
@@ -96,8 +95,8 @@ export const CreateShortLinkForm = () => {
         <Dialog.Panel className="w-full h-full grid place-content-center">
           <Card className="bg-base-100 shadow-xl">
             <Card.Body>
-              <Card.Title tag="h2">
-                <Dialog.Title>That slug is already taken</Dialog.Title>
+              <Card.Title tag={Dialog.Title}>
+                That slug is already taken
               </Card.Title>
               <Dialog.Description>
                 Please try choosing a different slug
@@ -124,25 +123,28 @@ export const CreateShortLinkForm = () => {
         <Dialog.Panel className="w-full h-full grid place-content-center">
           <Card className="bg-base-100 shadow-xl">
             <Card.Body>
-              <Card.Title tag="h2">
-                <Dialog.Title>Your URL was created successfully!</Dialog.Title>
+              <Card.Title tag={Dialog.Title}>
+                Your URL was created successfully!
               </Card.Title>
               <Dialog.Description>
                 <a
                   href={`${origin}/#${getValues('slug')}`}
-                  className="underline"
+                  className="underline break-all"
                 >
                   {origin}/#{getValues('slug')}
                 </a>{' '}
                 -&gt;{' '}
-                <a href={getValues('url')} className="underline">
+                <a href={getValues('url')} className="underline break-all">
                   {getValues('url')}
                 </a>
               </Dialog.Description>
               <Card.Actions className="justify-end">
                 <Button
                   color="primary"
-                  onClick={() => setShowCreatedDialog(false)}
+                  onClick={() => {
+                    reset()
+                    setShowCreatedDialog(false)
+                  }}
                 >
                   Ok
                 </Button>
