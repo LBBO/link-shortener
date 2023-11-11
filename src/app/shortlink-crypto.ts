@@ -1,6 +1,7 @@
 import * as crypto from 'crypto'
 import { BinaryLike } from 'crypto'
 import zod from 'zod'
+import { EncryptedUrlData } from '@/app/shortlink.schema'
 
 const cipherName = 'aes-256-gcm'
 
@@ -37,20 +38,16 @@ export const encryptUrl = async (key: Buffer, url: string) => {
     iv: iv.toString('base64'),
     ciphertext: ciphertext.toString('base64'),
     hmac: hmac.toString('base64'),
-  }
+  } satisfies EncryptedUrlData
 }
 
-export const verifyANdDecrypt = async (
+export const verifyAndDecrypt = async (
   key: Buffer,
   {
     hmac: expectedHmacStr,
     ciphertext: ciphertextStr,
     iv: ivStr,
-  }: {
-    hmac: string
-    ciphertext: string
-    iv: string
-  },
+  }: EncryptedUrlData,
 ) => {
   const ciphertext = Buffer.from(ciphertextStr, 'base64')
   const expectedHmac = Buffer.from(expectedHmacStr, 'base64')

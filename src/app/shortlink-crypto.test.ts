@@ -1,7 +1,7 @@
 import {
   encryptUrl,
   getHashAndKeyFromSlug,
-  verifyANdDecrypt,
+  verifyAndDecrypt,
 } from '@/app/shortlink-crypto'
 import exp from 'constants'
 
@@ -18,7 +18,7 @@ it('should be able to verify the MAC', async () => {
 
   const { key } = await getHashAndKeyFromSlug(slug)
   const encryptedUrl = await encryptUrl(key, link)
-  const decryptedUrl = await verifyANdDecrypt(key, encryptedUrl)
+  const decryptedUrl = await verifyAndDecrypt(key, encryptedUrl)
 
   expect(decryptedUrl).toBe(link)
 })

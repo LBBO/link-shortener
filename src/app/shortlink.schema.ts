@@ -23,11 +23,3 @@ export const shortlinkCreateSchema = zod.object({
 })
 
 export type ShortlinkCreate = zod.infer<typeof shortlinkCreateSchema>
-
-export const shortlinkLookupResponseSchema = zod.object({
-  encryptedUrl: zod.string(),
-})
-
-export type ShortlinkLookupResponse = zod.infer<
-  typeof shortlinkLookupResponseSchema
->
