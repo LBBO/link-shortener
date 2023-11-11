@@ -13,13 +13,12 @@ const hash = async (slug: BinaryLike) => {
   const iterations = zod
     .number({ coerce: true })
     .parse(process.env.NEXT_PUBLIC_SLUG_HASHING_ITERATIONS)
-  return crypto.pbkdf2Sync(slug, salt, iterations, 64, 'sha512')
+  return crypto.pbkdf2Sync(slug, salt, iterations, 32, 'sha512')
 }
 
 export const getHashAndKeyFromSlug = async (slug: string) => {
-  const firstHash = await hash(slug)
-  const key = firstHash.subarray(0, 32)
-  const finalHash = await hash(firstHash)
+  const key = await hash(slug)
+  const finalHash = await hash(key)
   return { key, hash: finalHash.toString('base64') }
 }
 
