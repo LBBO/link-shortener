@@ -1,6 +1,6 @@
 import zod from 'zod'
 
-export const validUrlSchema = zod.string().url()
+export const validUrlSchema = zod.string().url('This is not a valid URL!')
 
 export const validSlugSchema = zod
   .string()

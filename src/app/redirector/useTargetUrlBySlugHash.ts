@@ -1,22 +1,21 @@
 import { useQuery } from '@tanstack/react-query'
 import { verifyAndDecrypt } from '@/app/shortlink-crypto'
-import { encryptedUrlDataSchema } from '@/app/shortlink.schema'
+import { EncryptedUrlData, validUrlSchema } from '@/app/shortlink.schema'
 
-export const useTargetUrlBySlugHash = (hashAndKey?: {
-  hash: string
-  key: Buffer
-}) =>
+export const useDecryptedUrl = (
+  key?: Buffer,
+  encryptedUrlData?: EncryptedUrlData,
+) =>
   useQuery({
-    queryKey: ['shortlink', hashAndKey?.hash],
-    enabled: Boolean(hashAndKey),
+    queryKey: ['decrypt-url', encryptedUrlData?.ciphertext],
+    enabled: Boolean(key && encryptedUrlData),
     queryFn: async () => {
-      if (hashAndKey) {
-        const { hash, key } = hashAndKey
-        const res = await fetch(`api/shortlink/${hash}`)
-        return await verifyAndDecrypt(
-          key,
-          encryptedUrlDataSchema.parse(await res.json()),
-        )
+      if (key && encryptedUrlData) {
+        const cleartext = await verifyAndDecrypt(key, encryptedUrlData)
+
+        //   Ensure that nobody created some ill-formed URL
+        return validUrlSchema.parse(cleartext)
       }
     },
+    staleTime: 300_000,
   })

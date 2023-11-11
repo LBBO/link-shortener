@@ -1,16 +1,18 @@
 'use client'
 
-import { useIsClient } from '@/app/client-context'
 import { getHashAndKeyFromSlug } from '@/app/shortlink-crypto'
 import { useQuery } from '@tanstack/react-query'
+import { useSlugFromUrl } from '@/app/redirector/useSlugFromUrl'
 
 export const useSlugHashAndKeyFromUrl = () => {
-  const isClient = useIsClient()
+  const slug = useSlugFromUrl()
   return useQuery({
-    queryKey: ['key-and-hash', isClient && window.location.hash.slice(1)],
+    queryKey: ['key-and-hash', slug?.slug],
     queryFn: async () => {
-      return await getHashAndKeyFromSlug(window.location.hash?.slice(1))
+      return await getHashAndKeyFromSlug(slug!.slug)
     },
-    enabled: Boolean(isClient && window.location.hash),
+    enabled: Boolean(slug),
+    staleTime: 300_000,
+    refetchOnWindowFocus: false,
   })
 }

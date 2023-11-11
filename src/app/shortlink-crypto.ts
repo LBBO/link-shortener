@@ -50,10 +50,9 @@ export const verifyAndDecrypt = async (
   }: EncryptedUrlData,
 ) => {
   const ciphertext = Buffer.from(ciphertextStr, 'base64')
-  const expectedHmac = Buffer.from(expectedHmacStr, 'base64')
   const iv = Buffer.from(ivStr, 'base64')
   const actualHmac = await createHmac(key, ciphertext)
-  const isValid = crypto.timingSafeEqual(actualHmac, expectedHmac)
+  const isValid = actualHmac.toString('base64') === expectedHmacStr
 
   if (!isValid) {
     throw new Error(
